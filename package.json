@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "IC tools",
   "main": "index.js",
+  "bin": {
+    "icecompr": "icecompr/icecompr.js"
+  },
   "scripts": {
     "test": "eslint icecompr/*.js && mocha test"
   },
