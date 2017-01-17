@@ -33,7 +33,7 @@ function compressor () {
     var frogs = 0; // [bits]
 
     function push_int_bits (value, bits) {
-        var next, scratch, tail;
+        var scratch, tail;
 
         scratch = 8 * swamp.length - frogs;
         if (scratch > bits) {
@@ -145,7 +145,7 @@ function compressor () {
         }
     }
 
-    $.on('error', function (err) { /* TODO */ });
+    $.on('error', function () { /* TODO */ });
 
     $._transform = function (chunk, enc, next) {
         compress(parse(chunk));
