@@ -8,6 +8,21 @@
 
 var stream = require('stream');
 
+function parse (chunk, deltas, numzeros) {
+    var i, ilen, byte, bit;
+    for (i = 0, ilen = 8 * chunk.length; i < ilen; i++) {
+        byte = chunk[i >> 3];
+        bit = byte & (1 << (7 - (i & 7)));
+        if (bit) {
+            deltas.push(numzeros);
+            numzeros = 0;
+        } else {
+            numzeros += 1;
+        }
+    }
+    return numzeros;
+}
+
 function dumpToTheSwamp (swamp, frogs, value, bits) {
     // very slow bit-by-bit implementation
     // TODO touch the swamp at Byte rate
@@ -47,22 +62,6 @@ function compressor () {
             dumpToTheSwamp(swamp, 0, value, scratch);
             frogs = tail;
         }
-    }
-
-    function parse (chunk) {
-        var deltas = [];
-        var i, ilen, byte, bit;
-        for (i = 0, ilen = 8 * chunk.length; i < ilen; i++) {
-            byte = chunk[i >> 3];
-            bit = byte & (1 << (7 - (i & 7)));
-            if (bit) {
-                deltas.push(numzeros);
-                numzeros = 0;
-            } else {
-                numzeros += 1;
-            }
-        }
-        return deltas;
     }
 
     function compress (deltas) {
@@ -148,7 +147,9 @@ function compressor () {
     $.on('error', function () { /* TODO */ });
 
     $._transform = function (chunk, enc, next) {
-        compress(parse(chunk));
+        var deltas = [];
+        numzeros = parse(chunk, deltas, numzeros);
+        compress(deltas);
         next();
     };
 
