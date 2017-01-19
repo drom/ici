@@ -44,7 +44,7 @@ function compressor () {
     // parse STATE
     var numzeros = 0;
     // compress STATE
-    var swamp = Buffer.alloc(0x10000);
+    var swamp = Buffer.alloc(0x8000);
     var frogs = 0; // [bits]
 
     function push_int_bits (value, bits) {
@@ -56,10 +56,11 @@ function compressor () {
             frogs += bits;
         } else {
             tail = bits - scratch;
-            dumpToTheSwamp(swamp, frogs, value >> scratch, tail);
+            dumpToTheSwamp(swamp, frogs, value >> tail, scratch);
             // drain the swamp
             $.push(swamp);
-            dumpToTheSwamp(swamp, 0, value, scratch);
+            swamp = Buffer.alloc(0x8000);
+            dumpToTheSwamp(swamp, 0, value, tail);
             frogs = tail;
         }
     }
