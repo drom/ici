@@ -7,7 +7,7 @@
     "icecompr": "icecompr/icecompr.js"
   },
   "scripts": {
-    "test": "eslint icecompr/*.js && mocha test"
+    "test": "eslint icecompr/*.js && nyc mocha"
   },
   "repository": {
     "type": "git",
@@ -19,10 +19,17 @@
     "url": "https://github.com/drom/ici/issues"
   },
   "homepage": "https://github.com/drom/ici#readme",
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
   "devDependencies": {
+    "ava": "^0.17.0",
     "chai": "^3.5.0",
     "eslint": "^2.0.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "nyc": "^10.1.2"
   }
 }

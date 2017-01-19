@@ -1,2 +1,6 @@
+node_modules
+coverage
 test
-icecompr/test
+.eslintrc
+.travis.yml
+appveyor.yml
